@@ -209,7 +209,6 @@
                 let page = (val - 1) *  this.listQuery.pn;
                 this.listQuery.pr = page
                 this.fetchData()
-
             },
             deleteData(val){
                 this.$confirm('此操作将永久删除套餐, 是否继续?', '提示', {

@@ -101,7 +101,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '平均温度',
+                        name: '销售量',
                         type: 'line',
                         data: y
                     }

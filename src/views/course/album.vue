@@ -42,7 +42,7 @@
                     <div>
                         <label class="btn" for="upload2">选择图片</label>
                         <input type="file" id="upload2" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 2)">
-                        <button @click="finish('base64')" class="btn">上传到服务器</button>
+                        <span @click="finish('base64')" class="btn">上传到服务器</span>
                     </div>
                 </el-form-item>
                 <el-form-item label="图片地址">
@@ -118,13 +118,13 @@
     import VueCropper from 'vue-cropper'
     import { mapGetters } from 'vuex'
     import { getAlbumList,createAlbum,updateAlbum,deleteAlbum } from '@/api/course'
-    import uploading from '@/api/utils'
+    import { uploading } from '@/api/utils'
     import { parseTime } from '@/utils/index'
     export default {
         data() {
             return {
                 example: {
-                    img: 'http://ofyaji162.bkt.clouddn.com/bg1.jpg',
+                    img: '',
                     info: true,
                     size: 1,
                     outputType: 'jpeg',
@@ -312,30 +312,3 @@
         }
     }
 </script>
-
-<style>
-
-    .btn {
-        display: inline-block;
-        line-height: 1;
-        white-space: nowrap;
-        cursor: pointer;
-        background: #fff;
-        border: 1px solid #c0ccda;
-        color: #1f2d3d;
-        text-align: center;
-        box-sizing: border-box;
-        outline: none;
-        margin:20px 10px 0px 0px;
-        padding: 9px 15px;
-        font-size: 14px;
-        border-radius: 4px;
-        color: #fff;
-        background-color: #50bfff;
-        border-color: #50bfff;
-        transition: all .2s ease;
-        text-decoration: none;
-        user-select: none;
-    }
-
-</style>

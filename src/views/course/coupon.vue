@@ -34,7 +34,7 @@
                     <el-table-column label="结束"><template slot-scope="scope">{{scope.row.exptime | parseTime}}</template></el-table-column>
                     <el-table-column label="操作" width="80">
                         <template slot-scope="scope">
-                            <el-button type="zuxia" size="mini" @click="payment">赠送</el-button>
+                            <el-button type="zuxia" size="mini" @click="payment(scope.row.sn)">赠送</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -74,17 +74,42 @@
 
             </el-tab-pane>
         </el-tabs>
+        <el-dialog title="我的朋友" :visible.sync="dialogFriends">
+            <el-table :data="friends" border v-loading.body="listLoading" element-loading-text="Loading">
+                <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{(scope.$index+friendsQuery.pr)+1}}</template></el-table-column>
+                <el-table-column property="user.name" label="姓名"></el-table-column>
+                <el-table-column label="性别">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.user.sex == 1">男</span>
+                        <span v-else-if="scope.row.user.sex == -1">女</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="80">
+                    <template slot-scope="scope">
+                        <el-button type="zuxia" size="mini" @click="giving(scope.row.user.userid)">赠送</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination-container">
+                <el-pagination background @size-change="fsizeChange" @current-change="fcountChange" :page-sizes="[10,20,30, 50]" :page-size="friendsQuery.pn" layout="sizes, prev, pager, next"></el-pagination>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 <script>
-    import { cardCenter,cardOtherList } from '@/api/course'
+    import { cardCenter,cardOtherList,getMyFriends,giveCard } from '@/api/course'
     import { parseTime } from '@/utils/index'
     export default {
         data() {
             return {
+                listLoading:false,
                 total:null,
+                giveCardid:null,
                 contentList: [],
+                dialogFriends:false,
                 cardList:[],
+                friends:[],
                 cardQuery:{
                     pr: 0,
                     pn: 10,
@@ -95,6 +120,10 @@
                     pn:30,
                     count:1,
                     status:1
+                },
+                friendsQuery:{
+                    pr: 0,
+                    pn: 10
                 }
             }
         },
@@ -122,6 +151,15 @@
                 this.cardQuery.pr = page
                 this.fetchData()
             },
+            fsizeChange(val) {
+                this.friendsQuery.pn = val
+                this.myfriends()
+            },
+            fcountChange(val) {
+                let page = (val - 1) *  this.friendsQuery.pn;
+                this.friendsQuery.pr = page
+                this.myfriends()
+            },
             handleClick(tab, event) {
                 let type = null
                 switch(tab.name) {
@@ -147,12 +185,43 @@
                     })
                 }
             },
-            payment() {
-                this.$notify({
-                    title: '提示',
-                    message: '请在网站前端支付或赠送',
-                    type: 'warning'
-                });
+            payment(id) {
+                if(id) {
+                    this.giveCardid = id
+                    this.myfriends()
+                    this.dialogFriends = true
+                } else {
+                    this.$message({
+                        message: '卡券编号错误，请重试',
+                        type: 'warning'
+                    });
+                }
+            },
+            myfriends(){
+                this.listLoading = true
+                getMyFriends(this.friendsQuery).then((d) => {
+                    this.listLoading = false
+                    this.friends = d.list
+                })
+            },
+            giving(id){
+                if(id){
+                    giveCard({sn:this.giveCardid,userid:id}).then((d) => {
+                        this.$message({
+                            message: d.msg,
+                            type: d.status == 1? 'success' : 'error'
+                        });
+                        if(d.status == 1) {
+                            this.dialogFriends = false
+                            this.handleClick({name:'noUse'})
+                        }
+                    })
+                } else {
+                    this.$message({
+                        message: '用户编号错误，请重试',
+                        type: 'warning'
+                    });
+                }
             }
         }
 

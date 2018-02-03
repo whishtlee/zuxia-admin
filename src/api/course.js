@@ -161,3 +161,100 @@ export function getReport(params) {
     return promise
 }
 
+//  赠送好友查询
+export function getMyFriends(params) {
+    return request({
+        url: '/MessageSafeOut/myFriend',
+        method: 'post',
+        params
+    })
+}
+
+//  赠送好友卡券
+export function giveCard(params) {
+    return request({
+        url: '/Card/giveCard',
+        method: 'post',
+        params
+    })
+}
+
+//  我发布的卡券列表
+export function getMyCardList(params) {
+    return request({
+        url: '/Card/couponList',
+        method: 'post',
+        params
+    })
+}
+
+//  赠送好友查询
+export function getMyFriendsOrFans(params) {
+    return request({
+        url: '/MessageSafeOut/myFanceAndFollowAblumUser',
+        method: 'post',
+        params
+    })
+}
+
+
+//  停止发行我发布的卡券
+export function getStopCard(id) {
+    return request({
+        url: '/Card/closeCoupon',
+        method: 'post',
+        params: {
+            couponid: id
+        }
+    })
+}
+
+//  赠送好友我发布的卡券
+export function giveMyCard(id, uid) {
+    return request({
+        url: '/Card/giveCouponUserin',
+        method: 'post',
+        params: {
+            couponid: id,
+            userid: uid
+        }
+    })
+}
+
+//  获取适合类型
+export function commodity(params) {
+    return request({
+        url: '/Card/myCommodity',
+        method: 'post',
+        params
+    })
+}
+
+//  发行赠送卡券
+export function issueGiveCard(params) {
+    params.activetime = params.activetime * 60 * 60
+    return request({
+        url: '/Card/addGiveCoupon',
+        method: 'post',
+        params
+    })
+}
+
+//  发行普通
+export function issueOrdinaryCard(params) {
+    params.activetime = params.activetime * 60 * 60
+    return request({
+        url: '/Card/addCoupon',
+        method: 'post',
+        params
+    })
+}
+
+//  学习记录
+export function getRecordList(params) {
+    return request({
+        url: '/MessageSafeOut/coursePlaybackRecord',
+        method: 'post',
+        params
+    })
+}

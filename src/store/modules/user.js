@@ -32,6 +32,7 @@ const user = {
                 login(username, userInfo.password).then(response => {
                     const data = response.user
                     setToken(data.token)
+                    commit('SET_AVATAR', 'http://imgs.cqzuxia.com/small_light/images/avatar/'+data.userid+'.jpg')
                     commit('SET_TOKEN', data.key)
                     resolve()
                 }).catch(error => {
@@ -57,6 +58,7 @@ const user = {
 
         // 登出
         LogOut({ commit, state }) {
+                console.log(commit)
             return new Promise((resolve, reject) => {
                 logout(state.token).then(() => {
                     commit('SET_TOKEN', '')

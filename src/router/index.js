@@ -74,11 +74,6 @@ export const asyncRouterMap = [
                 name: '学院班级',
                 component: _import('account/class'),
                 meta: { title: '学院班级', icon: 'class' }
-            }, {
-                path: 'class2',
-                name: '学院班级2',
-                component: _import('account/class'),
-                meta: { title: '学院班级2', icon: 'class' }
             }
         ]
     },
@@ -103,9 +98,15 @@ export const asyncRouterMap = [
             },
             {
                 path: 'coupon',
-                name: '优惠券管理',
+                name: '卡券管理',
                 component: _import('course/coupon'),
-                meta: { title: '优惠券管理', icon: 'coupon' }
+                meta: { title: '卡券管理', icon: 'coupon' }
+            },
+            {
+                path: 'release',
+                name: '发布卡券',
+                component: _import('course/release'),
+                meta: { title: '发布卡券', icon: 'release' }
             },
             {
                 path: 'sales',
@@ -118,6 +119,12 @@ export const asyncRouterMap = [
                 name: '销售账单报表',
                 component: _import('course/report'),
                 meta: { title: '销售报表', icon: 'report' }
+            },
+            {
+                path: 'record',
+                name: '学习记录',
+                component: _import('course/record'),
+                meta: { title: '学习记录', icon: 'record' }
             }
         ]
     },
