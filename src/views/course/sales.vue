@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
-         <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
+         <el-table :data="list" size="small" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+            <el-table-column align="center" label='ID' width="60"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
             <el-table-column label="订单编号"  width="160"><template slot-scope="scope">{{scope.row.sn}}</template></el-table-column>
             <el-table-column label="标题"><template slot-scope="scope">{{scope.row.title}}</template></el-table-column>
             <el-table-column label="金额"  width="80"><template slot-scope="scope">{{scope.row.total}}</template></el-table-column>

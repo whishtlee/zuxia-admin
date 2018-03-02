@@ -2,27 +2,16 @@ import axios from 'axios'
 
 // 添加请求头
 export function uploading(e) {
-    //console.log(e)
-    var self = this
-    // let file = e.target.files[0]
-    let file = e
-    /* eslint-disable no-undef */
-    let param = new FormData()  // 创建form对象
-    param.append('file', file, file.name)  // 通过append向form对象添加数据
-    param.append('chunk', '0') // 添加form表单中其他数据
-    // console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+    let params = new FormData()
+    params.append('file', e, "file_" + Date.parse(new Date()) + ".png")
     let config = {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: {'Content-Type': 'multipart/form-data'}
     }
-    // 添加请求头
-    // axios.post('http://edu.cqzuxia.com/uploading', param, config).then(response => {
-    //    console.log(response)
-    //    if (response.data.code === 0) {
-    //        //   self.ImgUrl = response.data.data
-    //    }
-    //    console.log(response.data)
-    // })
-
-    return { "msg": "1", "name": "166bf47fdd056baa8c048b11c64bbee181cdf327_0.3740_.png", "count": 1 };
-
+    var data = new Promise(function (resolve, reject) {
+        axios.post('http://edu.cqzuxia.com/uploading', params, config).then(response => {
+            resolve(response.data);
+        })
+    })
+    return data;
+    //return { "msg": "1", "name": "166bf47fdd056baa8c048b11c64bbee181cdf327_0.3740_.png", "count": 1 };
 }

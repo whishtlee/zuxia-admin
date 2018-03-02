@@ -25,16 +25,90 @@ export const constantRouterMap = [
     { path: '/404', component: _import('errorPage/404'), hidden: true },
     { path: '/401', component: _import('errorPage/401'), hidden: true },
     {
-        path: '/',
+        path: '',
         component: Layout,
         redirect: '/dashboard',
-        name: 'Dashboard',
+        name: '首页',
         hidden: true,
+        meta: { title: '首页', icon: 'dashboard' },
         children: [{
             path: 'dashboard',
-            component: _import('dashboard/index')
+            component: _import('dashboard/index'),
+            meta: {title: '主页', icon: 'dashboard', noCache: true}
         }]
     },
+    {
+        path: '/account',
+        component: Layout,
+        redirect:'noredirect',
+        meta: { title: '学院管理', icon: 'school' },
+        children: [
+            {
+                path: 'class/:id/:name',
+                component: _import('account/class'),
+                hidden: true,
+                meta: {  icon: 'class' }
+            }
+        ]
+    },
+    {
+        path: '/system',
+        component: Layout,
+        redirect:'noredirect',
+        meta: { title: '课程管理', icon: 'course' },
+        children: [
+            {
+                path: 'album',
+                //name: '专辑管理',
+                component: _import('course/album'),
+                meta: { title: '专辑管理', icon: 'album' }
+            },
+            {
+                path: 'album/video/:id',
+                //name: '专辑视频管理',
+                component: _import('course/video'),
+                hidden: true,
+                meta: { title: '视频管理', icon: 'album' }
+            },
+            {
+                path: 'package',
+                //name: '套餐管理',
+                component: _import('course/package'),
+                meta: { title: '套餐管理', icon: 'package' }
+            },
+            //{
+            //    path: 'coupon',
+            //    //name: '卡券管理',
+            //    component: _import('course/coupon'),
+            //    meta: { title: '卡券管理', icon: 'coupon' }
+            //},
+            {
+                path: 'release',
+                //name: '发布卡券',
+                component: _import('course/release'),
+                meta: { title: '发布卡券', icon: 'release' }
+            },
+            {
+                path: 'sales',
+                //name: '销售账单历史',
+                component: _import('course/sales'),
+                meta: { title: '销售账单', icon: 'sales' }
+            },
+            {
+                path: 'report',
+                //name: '销售账单报表',
+                component: _import('course/report'),
+                meta: { title: '销售报表', icon: 'report' }
+            },
+            {
+                path: 'record',
+                //name: '学习记录',
+                component: _import('course/record'),
+                meta: { title: '学习记录', icon: 'record' }
+            }
+        ]
+    },
+    { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({
@@ -48,7 +122,7 @@ export const asyncRouterMap = [
     {
         path: '/permission',
         component: Layout,
-        redirect: '/permission/index',
+        redirect: 'noredirect',
         meta: { roles: ['admin'] }, // you can set roles in root nav
         children: [{
             path: 'index',
@@ -62,71 +136,4 @@ export const asyncRouterMap = [
         }]
     },
 
-    {
-        path: '/account',
-        component: Layout,
-        redirect: '/account/class',
-        name: '学院管理',
-        meta: { title: '学院管理', icon: 'school' },
-        children: [
-            {
-                path: 'class',
-                name: '学院班级',
-                component: _import('account/class'),
-                meta: { title: '学院班级', icon: 'class' }
-            }
-        ]
-    },
-    {
-        path: '/system',
-        component: Layout,
-        redirect: '/course/album',
-        name: '课程管理',
-        meta: { title: '课程管理', icon: 'course' },
-        children: [
-            {
-                path: 'album',
-                name: '专辑管理',
-                component: _import('course/album'),
-                meta: { title: '专辑管理', icon: 'album' }
-            },
-            {
-                path: 'package',
-                name: '套餐管理',
-                component: _import('course/package'),
-                meta: { title: '套餐管理', icon: 'package' }
-            },
-            {
-                path: 'coupon',
-                name: '卡券管理',
-                component: _import('course/coupon'),
-                meta: { title: '卡券管理', icon: 'coupon' }
-            },
-            {
-                path: 'release',
-                name: '发布卡券',
-                component: _import('course/release'),
-                meta: { title: '发布卡券', icon: 'release' }
-            },
-            {
-                path: 'sales',
-                name: '销售账单历史',
-                component: _import('course/sales'),
-                meta: { title: '销售账单', icon: 'sales' }
-            },
-            {
-                path: 'report',
-                name: '销售账单报表',
-                component: _import('course/report'),
-                meta: { title: '销售报表', icon: 'report' }
-            },
-            {
-                path: 'record',
-                name: '学习记录',
-                component: _import('course/record'),
-                meta: { title: '学习记录', icon: 'record' }
-            }
-        ]
-    },
-    { path: '*', redirect: '/404', hidden: true }
 ]

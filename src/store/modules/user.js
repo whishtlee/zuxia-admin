@@ -45,8 +45,9 @@ const user = {
         GetInfo({ commit, state }) {
             return new Promise((resolve, reject) => {
                 getInfo(state.token).then(response => {
-                    const data = response.user
-                    commit('SET_ROLES', 'admin')//data.role
+                    const data = response.info
+                    const role = data.isteacher ? 'teacher' : ''
+                    commit('SET_ROLES', role)//data.role
                     commit('SET_NAME', data.name)
                     commit('SET_AVATAR', 'http://imgs.cqzuxia.com/small_light/images/avatar/'+data.userid+'.jpg')
                     resolve(response)

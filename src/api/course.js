@@ -37,6 +37,68 @@ export function deleteAlbum(params) {
     })
 }
 
+//  专辑套餐视频管理
+export function albumVideo(params) {
+    return request({
+        url: '/MessageSafeOut/myAlbum',
+        method: 'post',
+        params
+    })
+}
+
+//  视频试播
+export function pilotVideo(params,type) {
+    if(type) {
+        return request({
+            url: '/MessageSafeInShare/setPilotCourse416',
+            method: 'post',
+            params
+        })
+    } else {
+        return request({
+            url: '/MessageSafeInShare/cancelPilotCourse416',
+            method: 'post',
+            params
+        })
+    }
+}
+
+//  修改视频信息
+export function updateVideoInfo(params,type) {
+    return request({
+        url: '/MessageOut/getCourseInfo397',
+        method: 'post',
+        params
+    })
+}
+
+//  修改视频
+export function updateVideo(params) {
+    return request({
+        url: '/MessageSafeInShare/updateCourse',
+        method: 'post',
+        params
+    })
+}
+
+//  删除视频
+export function deleteVideo(params) {
+    return request({
+        url: '/MessageSafeInShare/delCourse337',
+        method: 'post',
+        params
+    })
+}
+
+//  创建视频
+export function createVideo(params) {
+    return request({
+        url: '/MessageSafeInShare/sendCourseMsg',
+        method: 'post',
+        params
+    })
+}
+
 // 获取定价与套餐
 export function getPackageList(params) {
     return request({

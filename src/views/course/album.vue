@@ -1,25 +1,38 @@
 <template>
     <div class="app-container">
+        <el-row>
+            <el-col :span="6" :offset="0">
+                <el-card :body-style="{ padding: '0px' }">
+                    <div  @click="handleCreate">
+                        <img :src="defaultImg" class="image" height="255">
+                        <div style="padding: 10px;">
+                            <span class="ellipsis">新专辑</span>
+                            <div class="bottom clearfix">
+                                <time class="time">点击添加新专辑</time>
+                                <el-button type="text" class="button"></el-button>
+                            </div>
+                        </div>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="6" v-for="(o, index) in list" :key="o.id" :offset="0">
+                <el-card :body-style="{ padding: '0px' }">
+                    <img :src="$store.getters.imgSrc+o.picid" class="image" height="255">
+                    <div style="padding: 10px;">
+                        <span class="ellipsis">{{o.name}}</span>
+                        <div class="bottom clearfix">
+                            <time class="time">{{o.time | parseTime('{y}-{m}-{d}')}}</time>
+                            <el-button type="text" class="button" @click="deleteData(o.id)">删除</el-button>
+                            <el-button type="text" class="button" @click="handleUpdate(o)">修改</el-button>
+                            <router-link :to="'/system/album/video/' + o.id">
+                                <el-button type="text" class="button">管理</el-button>
+                            </router-link>
 
-        <div class="filter-container">
-            <el-button class="filter-item el-button--medium" @click="handleCreate" type="primary" icon="el-icon-edit">添加</el-button>
-        </div>
-        <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{scope.$index+1}}</template></el-table-column>
-            <el-table-column label="名称"><template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
-            <el-table-column label="标签"><template slot-scope="scope">{{scope.row.flag}}</template></el-table-column>
-            <el-table-column label="时间" width="160"><template slot-scope="scope">{{scope.row.time | parseTime}}</template></el-table-column>
-            <el-table-column label="操作" width="125">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" content="修改" placement="top">
-                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)"></el-button>
-                    </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteData(scope.row.id)"></el-button>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-        </el-table>
+                        </div>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
 
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="50%">
             <el-form  ref="createPackage" :model="album" label-position="right" label-width="100px" style="padding: 0 10px">
@@ -137,6 +150,7 @@
                     fixed: true,
                     fixedNumber: [2, 3]
                 },
+                defaultImg: require('../../assets/add.jpg'),
                 dialogTitle:'',
                 showMoney:false,
                 list:null,
@@ -222,7 +236,7 @@
                 })
             },
             handleUpdate(row){
-                this.example.img = this.$store.getters['imgsrc'] + row.picid
+                this.example.img = this.$store.getters.imgSrc + row.picid
                 this.album = Object.assign({}, row) // copy obj
                 this.dialogFormVisible = true
                 this.dialogStatus = 'update'
@@ -305,10 +319,25 @@
             },
             finish (type) {
                 this.$refs.cropper2.getCropBlob((data) => {
-                    var img = uploading(data)
-                    this.album.picid = img.name
+                    var _this = this.album
+                    uploading(data).then(function(d){
+                        if(d) {
+                            _this.picid = d.name
+                        } else {
+                            this.$notify.error({
+                                title: '错误',
+                                message: '图片上传失败，请稍后再试'
+                            });
+                        }
+                    }).catch(() => {});
+
                 })
             }
         }
     }
 </script>
+<style>
+    .el-col-6{padding: 10px;}
+    .button{margin-left: 5px;}
+    .bottom{line-height: 16px;}
+</style>

@@ -1,28 +1,49 @@
 <template>
     <div class="app-container">
-        <div class="filter-container">
-            <el-button class="filter-item el-button--medium"  type="primary" icon="el-icon-edit" @click="issue">添加</el-button>
-        </div>
-        <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
-            <el-table-column label="名称"><template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
-            <el-table-column label="类型"><template slot-scope="scope">{{scope.row.sellerName}}</template></el-table-column>
-            <el-table-column label="价值" width="70"><template slot-scope="scope">{{scope.row.cost}}</template></el-table-column>
-            <el-table-column label="售价" width="70"><template slot-scope="scope">{{scope.row.price}}</template></el-table-column>
-            <el-table-column label="剩余" width="70"><template slot-scope="scope">{{scope.row.count - scope.row.saleSize}}</template></el-table-column>
-            <el-table-column label="发行时间" sortable width="160" prop="time"><template slot-scope="scope">{{scope.row.time | parseTime}}</template></el-table-column>
-            <el-table-column label="操作" width="100">
-                <template slot-scope="scope">
-                    <el-button  v-if="scope.row.status == 1"  type="primary" size="mini"  @click="stopCard(scope.row.couponid)">停止发行</el-button>
-                    <el-button  v-else-if="scope.row.status ==2"  type="zuxia" size="mini" @click="payment(scope.row.couponid)">赠送卡券</el-button>
-                    <el-button  v-else type="danger" size="mini">已停止</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+        <el-row>
+            <el-col :span="6" :offset="0">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <span class="ft12">发行新卡券</span>
+                        <el-button class="flr" size="mini" type="primary" icon="el-icon-edit" @click="issue" style="height: 20px;padding: 0px 5px;line-height: 19px;">发行新卡</el-button>
+                    </div>
+                    <div>
+                        <div class="user-info red">类型、例：足下课堂新卡券</div>
+                        <div class="user-info red">价值、例：998.00</div>
+                        <div class="user-info red">售价、例：98.00</div>
+                        <div class="user-info red">剩余、例：100</div>
+                        <div class="user-info red">发行、例：{{new Date() | parseTime}}</div>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="6" :offset="0" v-for="(item, index) in list" :key="item.couponid">
+                <el-card>
+                    <div slot="header" class="clearfix">
+                        <span class="ft12">{{item.name}}</span>
+                        <el-tag type="danger" size="mini" v-if="item.status == 1" class="flr">
+                            <span class="cursor" @click="stopCard(item.couponid)">停止</span>
+                        </el-tag>
+                        <el-tag type="warning" size="mini" v-else-if="item.status ==2" class="flr">
+                            <span class="cursor" @click="payment(item.couponid)">赠送</span>
+                        </el-tag>
+                        <el-tag type="info" size="mini" v-else class="flr">
+                            <span class="cursor">已停止</span>
+                        </el-tag>
+                    </div>
+                    <div>
+                        <div class="user-info">类型：{{item.sellerName}}</div>
+                        <div class="user-info">价值：{{item.cost}}</div>
+                        <div class="user-info">售价：{{item.price}}</div>
+                        <div class="user-info">剩余：{{item.count - item.saleSize}}</div>
+                        <div class="user-info">发行：{{item.time | parseTime}}</div>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
 
         <!-- 分页 -->
         <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10,20,30, 50]" :page-size="listQuery.pn" layout="sizes, prev, pager, next"></el-pagination>
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[12,24,36,48]" :page-size="listQuery.pn" layout="sizes, prev, pager, next"></el-pagination>
         </div>
 
         <!-- 我的朋友 -->
@@ -235,7 +256,7 @@
                 friends:[],
                 listQuery:{
                     pr:0,
-                    pn:10,
+                    pn:11,
                     count:1
                 },
                 form:{
@@ -423,3 +444,16 @@
         }
     }
 </script>
+<style>
+    .el-col-6{padding: 10px;}
+    .button{margin-left: 5px;}
+    .bottom{line-height: 16px;}
+    .user-info {
+        font-size: 13px;
+        padding-bottom: 10px;
+    }
+    .red{color:#ff0000}
+    .el-card__body {
+        padding: 20px;
+    }
+</style>

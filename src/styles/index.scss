@@ -116,38 +116,64 @@ a:hover {
   line-height: 12px;
 }
 
+.flt {
+  float: left;
+}
+
 .flr {
   float: right;
 }
 
-.button{
+.button {
   padding: 0;
   float: right;
 }
 
-.mt10{
+.mt10 {
   margin-top: 10px;
 }
 
 .btn {
-        display: inline-block;
-        line-height: 1;
-        white-space: nowrap;
-        cursor: pointer;
-        background: #fff;
-        border: 1px solid #c0ccda;
-        color: #1f2d3d;
-        text-align: center;
-        box-sizing: border-box;
-        outline: none;
-        margin:20px 10px 0px 0px;
-        padding: 9px 15px;
-        font-size: 14px;
-        border-radius: 4px;
-        color: #fff;
-        background-color: #50bfff;
-        border-color: #50bfff;
-        transition: all .2s ease;
-        text-decoration: none;
-        user-select: none;
-    }
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #c0ccda;
+  color: #1f2d3d;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  margin: 20px 10px 0px 0px;
+  padding: 9px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #50bfff;
+  border-color: #50bfff;
+  transition: all .2s ease;
+  text-decoration: none;
+  user-select: none;
+}
+
+.ft12 {
+  font-size: 12px;
+}
+
+.cursor {
+  cursor: pointer
+}
+
+.text-center {
+  text-align: center;
+}
+
+.review-shibo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url(../assets/hava-shibo.png);
+  background-size: cover;
+}

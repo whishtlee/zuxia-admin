@@ -3,8 +3,8 @@
         <div class="filter-container">
             <el-button class="filter-item el-button--medium" @click="handleCreate" type="primary" icon="el-icon-edit">添加</el-button>
         </div>
-        <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
+        <el-table :data="list" size="small" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+            <el-table-column align="center" label='ID' width="60"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
             <el-table-column label="名称"><template slot-scope="scope">{{scope.row.label}}</template></el-table-column>
             <el-table-column label="售价" width="100"><template slot-scope="scope">{{scope.row.total}}</template></el-table-column>
             <el-table-column label="时间" width="160"><template slot-scope="scope">{{scope.row.time | parseTime}}</template></el-table-column>
@@ -42,36 +42,36 @@
                 </el-form-item>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="VIP1 售价" prop="v1" :rules="{ type: 'number', message: '售价必须为数字值'}">
+                        <el-form-item label="VIP1 售价" prop="v1">
                             <el-input v-model.number="temp.v1" placeholder="VIP1 售价" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="VIP2 售价" prop="v2" :rules="{ type: 'number', message: '售价必须为数字值'}">
+                        <el-form-item label="VIP2 售价" prop="v2">
                             <el-input v-model.number="temp.v2" placeholder="VIP2 售价"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="VIP3 售价" prop="v3" :rules="{ type: 'number', message: '售价必须为数字值'}">
+                        <el-form-item label="VIP3 售价" prop="v3">
                             <el-input v-model.number="temp.v3" placeholder="VIP3 售价"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="VIP4 售价" prop="v4" :rules="{ type: 'number', message: '售价必须为数字值'}">
+                        <el-form-item label="VIP4 售价" prop="v4">
                             <el-input v-model.number="temp.v4" placeholder="VIP4 售价"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="VIP5 售价" prop="v5" :rules="{ type: 'number', message: '售价必须为数字值'}">
+                        <el-form-item label="VIP5 售价" prop="v5">
                             <el-input v-model.number="temp.v5" placeholder="VIP5 售价"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="VIP6 售价" prop="v6" :rules="{ type: 'number', message: '售价必须为数字值'}">
+                        <el-form-item label="VIP6 售价" prop="v6">
                             <el-input v-model.number="temp.v6" placeholder="VIP6 售价"></el-input>
                         </el-form-item>
                     </el-col>
@@ -93,7 +93,7 @@
 
         <div class="filter-container">
             <template>
-                <el-table :data="vlist" height="300" border fit highlight-current-row>
+                <el-table :data="vlist" size="small" height="300" border fit highlight-current-row>
                     <el-table-column label="专辑名称"><template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
                     <el-table-column label="专辑时间" width="180"> <template slot-scope="scope">{{scope.row.time | parseTime}}</template></el-table-column>
                     <el-table-column label="专辑标签"><template slot-scope="scope">{{scope.row.flags}}</template></el-table-column>
@@ -109,7 +109,7 @@
             <el-row :gutter="24">
                 <el-col :span="6" v-for="(o, index) in videoToAlbum" :key="index" style="margin-bottom: 15px;">
                     <el-card :body-style="{ padding: '0px' }">
-                        <img :src="'http://img.zuxiaedu.com/small_light(cw=500,ch=300)/images/'+o.pic.stdmsgpicsid+'.png'" class="image">
+                        <img :src="$store.getters.imgSrc+o.pic.stdmsgpicsid+'.png'" class="image" height="135">
                         <div style="padding: 14px;">
                             <span class="ellipsis">{{o.message}}</span>
                             <div class="bottom clearfix">

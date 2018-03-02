@@ -39,7 +39,7 @@ export function login(username, password) {
 
 export function getInfo(userid) {
     return request({
-        url: '/MessageOut/individualResume',
+        url: '/UserItp/getInfo',
         method: 'get',
         params: {userid}
     })

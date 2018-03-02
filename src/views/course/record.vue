@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
-        <el-table :data="list" border style="width: 100%">
-            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
+        <el-table :data="list" size="small" border style="width: 100%">
+            <el-table-column align="center" label='ID' width="60"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
             <el-table-column label="用户" width="200"><template slot-scope="scope">{{scope.row.user.name}}</template></el-table-column>
             <el-table-column label="课程"><template slot-scope="scope">{{scope.row.message.message}}</template></el-table-column>
             <el-table-column label="时间" sortable prop="time" width="160"><template slot-scope="scope">{{scope.row.time | parseTime}}</template></el-table-column>

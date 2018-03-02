@@ -1,42 +1,57 @@
 <template>
     <div class="app-container">
-        <div class="filter-container">
-            <el-select clearable class="filter-item" v-model="listQuery.school" placeholder="选择学校" @change="changeSchool">
-                <el-option v-for="item in schoolOptions" :key="item.id" :label="item.title" :value="item.id"></el-option>
-            </el-select>
-            <el-select clearable class="filter-item" v-model="listQuery.grade" placeholder="选择年级"  @change="changeGrade">
-                <el-option  v-for="item in gradeOptions" :key="item.id" :label="item.title" :value="item.id"></el-option>
-            </el-select>
-        </div>
-
-        <el-table :data="cls" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{scope.$index+1}}</template></el-table-column>
-            <el-table-column label="学校"><template slot-scope="scope">{{scope.row.school}}</template></el-table-column>
-            <el-table-column label="年级"><template slot-scope="scope">{{scope.row.grade}}</template></el-table-column>
-            <el-table-column label="名称"><template slot-scope="scope">{{scope.row.title}}</template></el-table-column>
+        <el-table :data="stdlist" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+            <el-table-column align="center" label='ID' width="80"><template slot-scope="scope">{{(scope.$index+listQuery.pr)+1}}</template></el-table-column>
+            <el-table-column label="姓名"><template slot-scope="scope">{{scope.row.name}}</template></el-table-column>
+            <el-table-column label="性别">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.sex == 1">男</span>
+                    <span v-if="scope.row.sex == -1">女</span>
+                </template>
+            </el-table-column>
+             <el-table-column label="同意">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.agree">是</span>
+                    <span v-else>否</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态" width="100">
+                <template slot-scope="scope">
+                     <el-button   type="success" size="mini">正式成员</el-button> 
+                     <!--v-if="scope.row.confirm == 1"   -->
+                    <!-- <el-button  v-else type="zuxia" size="mini" @click="payment(scope.row.userid)">同意加入</el-button> -->
+                </template>
+            </el-table-column>
 
         </el-table>
 
+        <div class="pagination-container">
+            <el-pagination background @size-change="fsizeChange" @current-change="fcountChange" :page-sizes="[10,20,30, 50]" :page-size="listQuery.pn" layout="sizes, prev, pager, next" :total="total"></el-pagination>
+        </div>
 
 
     </div>
 </template>
 <script>
-    import { college } from '@/api/account'
+    import { collegeAdmin,agreeJoin } from '@/api/account'
     export default {
         data() {
             return {
                 listLoading:false,
                 total:0,
                 listQuery:{
-                    school:'',
-                    grade:''
+                    pr:0,
+                    pn:10,
+                    collegeid:this.$route.params.id
                 },
-                cls:[],
-                clsList:[],
-                schoolOptions:[],
-                gradeOptions:[],
-                gradeOptionsList:[]
+                stdlist:[],
+            }
+        },
+        watch: {
+            '$route' (to, from) {
+                this.listQuery.collegeid = this.$route.params.id
+                //获取上方数据列表
+                this.fetchData()
             }
         },
         created() {
@@ -45,44 +60,31 @@
         methods: {
             fetchData() {// 加载数据
                 this.listLoading = true
-                college(this.listQuery).then(d => {
-                    this.schoolOptions = d.school
-                    this.gradeOptions = d.grade
-                    this.gradeOptionsList = d.grade
-                    this.cls = d.cls
-                    this.clsList = d.cls
-                    this.total = d.size
+                collegeAdmin(this.listQuery).then(d => {
                     this.listLoading = false
-                })
+                    this.total = parseInt(d.count)
+                    this.stdlist = d.collegeadmin
+                }).catch(() => {
+                    this.listLoading = false
+                });
             },
-            handleFilter() {
-
+            payment(id) {
+                agreeJoin(this.listQuery.collegeid,id).then((d) => {
+                    this.$message({
+                        message: d.msg,
+                        type: d.status == 1? 'success' : 'error'
+                    });
+                }).catch(() => {
+                });
             },
-            changeSchool() {
-                let newGrade = [];
-                for(const grade of this.gradeOptionsList){
-                    if(grade.pid == this.listQuery.school){
-                        newGrade.push(grade)
-                    }
-                }
-                if(this.listQuery.school) {
-                    this.gradeOptions = newGrade;
-                } else {
-                    this.gradeOptions = this.gradeOptionsList;
-                }
+            fsizeChange(val) {
+                this.listQuery.pn = val
+                this.fetchData()
             },
-            changeGrade() {
-                let newClass = [];
-                for(const cls of this.clsList){
-                    if(cls.pid == this.listQuery.grade){
-                        newClass.push(cls)
-                    }
-                }
-                if(this.listQuery.grade) {
-                    this.cls = newClass;
-                } else {
-                    this.cls = this.clsList;
-                }
+            fcountChange(val) {
+                let page = (val - 1) *  this.listQuery.pn;
+                this.listQuery.pr = page
+                this.fetchData()
             }
         }
     }

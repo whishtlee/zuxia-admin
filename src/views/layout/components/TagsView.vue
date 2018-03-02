@@ -52,19 +52,21 @@ export default {
   methods: {
     generateTitle, // generateTitle by vue-i18n
     generateRoute() {
-      if (this.$route.name) {
-        return this.$route
-      }
-      return false
+      // if (this.$route.name) {
+      //   return this.$route
+      // }
+      // return false
+      return this.$route
     },
     isActive(route) {
-      return route.path === this.$route.path || route.name === this.$route.name
+      return route.path === this.$route.path || route.title === this.$route.name
     },
     addViewTags() {
       const route = this.generateRoute()
       if (!route) {
         return false
       }
+     
       this.$store.dispatch('addVisitedViews', route)
     },
     moveToCurrentTag() {
