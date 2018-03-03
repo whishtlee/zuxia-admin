@@ -25,7 +25,12 @@
 
         <!-- 分页 -->
         <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10,20,30, 50]" :page-size="listQuery.pn" layout="total, sizes, prev, pager, next" :total="total"></el-pagination>
+            <el-pagination background @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :page-sizes="[10,20,30, 50]"
+                           :page-size="listQuery.pn"
+                           layout="total, sizes, prev, pager, next"
+                           :total="total" :current-page.sync="currentPage"></el-pagination>
         </div>
 
         <!-- 添加，修改窗口 -->
@@ -37,7 +42,7 @@
                 <el-form-item label="售价" prop="total" :rules="[{ required: true, message: '售价不能为空'},{ type: 'number', message: '售价必须为数字值'}]">
                     <el-input v-model.number="temp.total" placeholder="卖价"></el-input>
                 </el-form-item>
-                <el-form-item label="描述">
+                <el-form-item label="描述" prop="total"  :rules="{ required: true, message: '描述不能为空'}" >
                     <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="描述" v-model="temp.info"></el-input>
                 </el-form-item>
                 <el-row>
@@ -109,7 +114,8 @@
             <el-row :gutter="24">
                 <el-col :span="6" v-for="(o, index) in videoToAlbum" :key="index" style="margin-bottom: 15px;">
                     <el-card :body-style="{ padding: '0px' }">
-                        <img :src="$store.getters.imgSrc+o.pic.stdmsgpicsid+'.png'" class="image" height="135">
+                        <img :src="$store.getters.imgSrc+o.pic.stdmsgpicsid+'.png'" class="image" height="135" :onerror="defaultImg">
+                        <span class="review-jiaru" v-if="o.isAddFee == 1"></span>
                         <div style="padding: 14px;">
                             <span class="ellipsis">{{o.message}}</span>
                             <div class="bottom clearfix">
@@ -130,9 +136,11 @@
     export default {
         data() {
             return {
+                currentPage:1,
                 dialogTitle:'',
                 videoToAlbum:null,
                 vlist:null,
+                defaultImg: 'this.src="' + require('../../assets/pic_v.jpg') + '"',
                 videoManager:true,
                 dialogFormVisible: false,
                 listLoading:false,
@@ -206,6 +214,7 @@
                 this.fetchData()
             },
             handleCurrentChange(val) {
+                this.currentPage = val
                 let page = (val - 1) *  this.listQuery.pn;
                 this.listQuery.pr = page
                 this.fetchData()
@@ -257,7 +266,7 @@
                                 message: d.msg,
                                 type: d.status == 1? 'success' : 'error'
                             });
-                        })
+                        }).catch(() => {});
                     }
                 });
             },
@@ -273,7 +282,7 @@
                                 message: d.msg,
                                 type: d.status == 1? 'success' : 'error'
                             });
-                        })
+                        }).catch(() => {});
                     }
                 });
             },
@@ -283,13 +292,13 @@
                 this.videoToAlbum = null
                 getPageAlbumList(this.listQuery).then(response => {
                     this.vlist = response.list
-                })
+                }).catch(() => {});
             },
             albumVideo(id) {
                 this.videoQuery.id = id
                 getPageAlbumVideo(this.videoQuery).then((d) => {
                     this.videoToAlbum = d.list
-                })
+                }).catch(() => {});
             },
             joinPack(o,type){
                 if(type) {
@@ -302,8 +311,11 @@
                         message: d.msg,
                         type: d.status == 1? 'success' : 'error'
                     });
-                })
+                }).catch(() => {});
             }
         }
     }
 </script>
+<style>
+    .el-card{position: relative}
+</style>

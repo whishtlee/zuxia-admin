@@ -34,7 +34,8 @@
                         <div class="user-info">类型：{{item.sellerName}}</div>
                         <div class="user-info">价值：{{item.cost}}</div>
                         <div class="user-info">售价：{{item.price}}</div>
-                        <div class="user-info">剩余：{{item.count - item.saleSize}}</div>
+                        <div class="user-info" v-if="(item.count - item.saleSize) > 0">剩余：{{item.count - item.saleSize}}</div>
+                        <div class="user-info" v-else>剩余：无限</div>
                         <div class="user-info">发行：{{item.time | parseTime}}</div>
                     </div>
                 </el-card>
@@ -151,7 +152,11 @@
                     </el-col>    
                     <el-col :span="12">
                         <el-form-item label="发行时间" :label-width="formLabelWidth">
-                                <el-input v-model="ordinary.starttime" auto-complete="off" placeholder="发行时间"></el-input>
+                            <el-date-picker
+                                    v-model="ordinary.starttime"
+                                    type="datetime"
+                                    placeholder="选择日期时间">
+                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>  
@@ -437,8 +442,17 @@
             },
             finish (type) {
                 this.$refs.cropper.getCropBlob((data) => {
-                    var img = uploading(data)
-                    this.ordinary.pic = img.name
+                    var _this = this.ordinary
+                    uploading(data).then(function(d){
+                        if(d) {
+                            _this.pic = d.name
+                        } else {
+                            this.$notify.error({
+                                title: '错误',
+                                message: '图片上传失败，请稍后再试'
+                            });
+                        }
+                    }).catch(() => {});
                 })
             }
         }
@@ -455,5 +469,8 @@
     .red{color:#ff0000}
     .el-card__body {
         padding: 20px;
+    }
+    .el-date-editor.el-input{
+        width: auto;
     }
 </style>

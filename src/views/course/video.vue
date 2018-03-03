@@ -241,7 +241,7 @@
                     if(d.status == 1){
                         this.fetchData()
                     }
-                })
+                }).catch(() => {});
             },
             showm(){
                 this.showMoney = !this.showMoney
